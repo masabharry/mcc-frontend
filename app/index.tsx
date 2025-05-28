@@ -6,6 +6,7 @@ import { ThemedModal } from '@/components/ThemedModel';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -21,7 +22,7 @@ export default function HomeScreen() {
     const trimmedUsername = username.trim();
     const trimmedPassword = password.trim();
     try {
-      const res = await axios.post('http://192.168.137.223:5000/login', {
+      const res = await axios.post('https://mccbackend.vercel.app/login', { // Fixed URL
         username: trimmedUsername,
         password: trimmedPassword
 
@@ -29,21 +30,16 @@ export default function HomeScreen() {
 
       if (res.data.message === "Login successful") {
         await AsyncStorage.setItem('playerId', res.data.playerId);
-        console.log('Player ID:', res.data.playerId);
-        console.log(res.data)
         await AsyncStorage.setItem('playerName', res.data.playerName);
-        console.log('Player Name:', res.data.playerName);
-        router.replace('/home');
         await AsyncStorage.setItem('playerPhoto', res.data.playerPhoto);
-        console.log('Player Name:', res.data.playerPhoto);
-        // navigation.reset({
-        //   index: 0,
-        //   routes: [{ name: 'home' }],
-        // });
-
+           await AsyncStorage.setItem('role', 'player');
+        await AsyncStorage.setItem('playerData', JSON.stringify(res.data));
+      
         setUsername('');
         setPassword('');
+        router.replace('/home');
         setModalVisible(false);
+
       } else {
         alert('Login failed');
       }
@@ -63,14 +59,17 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+
+<ThemedText type="boldTitle"  style={{ textAlign: 'center', flexWrap: 'wrap', color:'#007bff' }}>Welcome To MCC</ThemedText>
+
       <ThemedButton title="Continue as Guest" type="primary" onPress={() => {
         AsyncStorage.setItem('role', 'guest');
         router.replace('/home');
       }} />
 
-      <ThemedButton title="Admin Login" type="transparent" onPress={() => setAdminModalVisible(true)} />
+      <ThemedButton title="Admin Login" type="danger" onPress={() => setAdminModalVisible(true)} />
 
-      <ThemedButton title="Player Login" type="transparent" onPress={() => setModalVisible(true)} />
+      <ThemedButton title="Player Login" type="success" onPress={() => setModalVisible(true)} />
 
       <ThemedModal
         visible={modalVisible}
@@ -109,7 +108,7 @@ export default function HomeScreen() {
         onSubmit={() => {
           if (adminPassword === '1234') {
             AsyncStorage.setItem('role', 'admin');
-            router.replace('/home');
+            router.replace('/admin/adminpanel');
           } else {
             Alert.alert('Incorrect Password');
           }

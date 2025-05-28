@@ -45,11 +45,12 @@ export const ThemedModal: React.FC<ThemedModalProps> = ({
           <ScrollView style={{ flexGrow: 0 }}>
             {inputs.map((input, idx) => (
               <ThemedInput
+               key={idx}
                 label={input.label}
                 value={input.value}
                 onChangeText={input.onChangeText}
                 placeholder={input.placeholder}
-                error={input.error} // ✨ this does everything
+                error={input.error} 
               />
             ))}
           </ScrollView>

@@ -25,7 +25,7 @@ export function ThemedButton({
       onPress={onPress}
       style={[styles.button, styles[type]]}
     >
-      <Text style={type === 'transparent' ? { color: '#007bff' } : styles.text}>{title}</Text>
+      <Text style={type === 'transparent' ? { color: '#8DD8FF' } : styles.text}>{title}</Text>
     </TouchableOpacity>
   );
 }
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   transparent: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#007bff',
+    borderColor: '#8DD8FF',
     // text color inside button
 
   },
