@@ -154,6 +154,8 @@ export default function RankingPage() {
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.2,
               shadowRadius: 4,
+              overflow: 'hidden',
+              flexWrap: 'wrap',
             }}
           >
             {type === 'Player' ? (

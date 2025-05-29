@@ -106,7 +106,7 @@ export default function HomeScreen() {
         title="Admin Login"
         onClose={() => setAdminModalVisible(false)}
         onSubmit={() => {
-          if (adminPassword === '1234') {
+          if (adminPassword === 'mcc20216297912') {
             AsyncStorage.setItem('role', 'admin');
             router.replace('/admin/adminpanel');
           } else {

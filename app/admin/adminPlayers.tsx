@@ -49,8 +49,10 @@ export default function AdminPlayersScreen() {
       t10_hsw: "0",
       t10_four: "0",
       t10_six: "0",
-      t10_ballsplayed: "0",
-      t10_ballsbowled: "0",
+      t10_totalBallsPlayed:
+        "0",
+      t10_totalBallsBowled:
+        "0",
       t10_runconceded: "0",
       t10_overbowled: "0",
       t15_scores: "0",
@@ -64,8 +66,10 @@ export default function AdminPlayersScreen() {
       t15_hsw: "0",
       t15_four: "0",
       t15_six: "0",
-      t15_ballsplayed: "0",
-      t15_ballsbowled: "0",
+      t15_totalBallsPlayed:
+        "0",
+      t15_totalBallsBowled:
+        "0",
       t15_runconceded: "0",
       t15_overbowled: "0",
       t6_scores: "0",
@@ -79,15 +83,20 @@ export default function AdminPlayersScreen() {
       t6_hsw: "0",
       t6_four: "0",
       t6_six: "0",
-      t6_ballsplayed: "0",
-      t6_ballsbowled: "0",
+      t6_totalBallsPlayed:
+        "0",
+      t6_totalBallsBowled:
+        "0",
       t6_runconceded: "0",
       t6_overbowled: "0",
     });
 
-  const [teams, setTeams] = useState([]);
-  const [selectedTeamId, setSelectedTeamId] = useState(1);
-
+  const [teams, setTeams] =
+    useState([]);
+  const [
+    selectedTeamId,
+    setSelectedTeamId,
+  ] = useState(1);
 
   useEffect(() => {
     const fetchTeamData =
@@ -99,7 +108,7 @@ export default function AdminPlayersScreen() {
             );
           const data =
             await response.json();
-       
+
           setTeams(data); // Store teams in state
         } catch (error) {
           console.error(
@@ -235,11 +244,11 @@ export default function AdminPlayersScreen() {
                   ) || 0,
                 ballsplayed:
                   Number(
-                    form.t10_ballsplayed
+                    form.totalBallsPlayed
                   ) || 0,
                 ballsbowled:
                   Number(
-                    form.t10_ballsbowled
+                    form.totalBallsBowled
                   ) || 0,
                 runconceded:
                   Number(
@@ -376,7 +385,6 @@ export default function AdminPlayersScreen() {
               },
             },
           };
-         
 
           await axios.post(
             "https://mccbackend.vercel.app/register",
@@ -1002,54 +1010,88 @@ export default function AdminPlayersScreen() {
           );
         }}
       />
-      <ThemedView
-        style={
-          styles.toggleContainer
+      <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={
+          false
         }
+              contentContainerStyle={{
+                paddingHorizontal: 8,
+                gap: 8,
+              }}
       >
-        {teams.map(
-          (teamId) => (
+          {teams
+                .slice() // create a shallow copy to avoid mutating the original array
+          .sort(
+            (a, b) =>
+              a.teamId -
+              b.teamId
+          ) // sort by teamId numerically
+          .map((team) => (
             <ThemedButton
               key={
-                teamId.teamId
+                team.teamId
               }
-              title={
-                teamId.teamId
-              }
+              title={team.teamId.toString()}
               type={
                 selectedTeamId ===
-                teamId.teamId
+                team.teamId
                   ? "primary"
                   : "transparent"
               }
               onPress={() =>
                 setSelectedTeamId(
-                  teamId.teamId
+                  team.teamId
                 )
               }
             />
-          )
-        )}
-      </ThemedView>
+          ))}
+      </ScrollView>
+
       {players
-  .filter(player => !selectedTeamId || player.teamId === selectedTeamId)
-  .map((player) => (
-    <View key={player._id} style={styles.card}>
-      {player.photoUrl ? (
-        <Image source={{ uri: player.photoUrl }} style={styles.photo} />
-      ) : (
-        <Text style={{ fontSize: 80, marginRight: 12, alignSelf: "center" }}>
-          👤
-        </Text>
-      )}
-      <ThemedText
-        style={{
-          alignSelf: "center",
-          fontSize: 23,
-          marginTop: 10,
-        }}
-      >
-        {player.name}
+        .filter(
+          (player) =>
+            !selectedTeamId ||
+            player.teamId ===
+              selectedTeamId
+        )
+        .map((player) => (
+          <View
+            key={player._id}
+            style={
+              styles.card
+            }
+          >
+            {player.photoUrl ? (
+              <Image
+                source={{
+                  uri: player.photoUrl,
+                }}
+                style={
+                  styles.photo
+                }
+              />
+            ) : (
+              <Text
+                style={{
+                  fontSize: 80,
+                  marginRight: 12,
+                  alignSelf:
+                    "center",
+                }}
+              >
+                👤
+              </Text>
+            )}
+            <ThemedText
+              style={{
+                alignSelf:
+                  "center",
+                fontSize: 23,
+                marginTop: 10,
+              }}
+            >
+              {player.name}
             </ThemedText>
             {/* <ThemedText
               style={{
@@ -1109,8 +1151,7 @@ export default function AdminPlayersScreen() {
               />
             </View>
           </View>
-        )
-      )}
+        ))}
 
       <ThemedModal
         visible={modalVisible}
@@ -1186,9 +1227,11 @@ const styles =
     },
     toggleContainer: {
       flexDirection: "row",
+      flexWrap: "wrap",
       justifyContent:
-        "center",
+        "space-evenly",
       marginBottom: 16,
       gap: 8,
+      width: "100%",
     },
   });
